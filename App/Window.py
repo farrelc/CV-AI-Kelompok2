@@ -1,7 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
+from PIL import Image, ImageTk
+import cv2
 
 class Window(tk.Tk):
+    cam_on = False
+    vid = None
+
     def __init__(self):
         super().__init__()
 
@@ -10,9 +15,76 @@ class Window(tk.Tk):
         self.geometry('1200x640')
         self.resizable(0,0)
 
-        # label
-        self.label = ttk.Label(self, text='Hello, Welcome to the App')
-        self.label.pack()
+        # Greetings words
+        self.greetings = ttk.Label(text = "Hello welcome to the App")
+        self.greetings.grid(row = 0, column = 0)
+
+        # Webcam
+        self.canvas = tk.Canvas(bg = "black", height=480, width=640)
+        self.canvas.create_text(330, 240, text="Camera is Turned Off", fill="white")
+        self.canvas.grid(row = 1, column = 0)
+
+        # button
+        self.button1 = ttk.Button(text="Toggle Webcam", command = self.toggle_webcam)
+        self.button1.grid(row = 2, column = 0)
+
+        # timer options
+        self.timer_label = ttk.Label(text="Select Time Threshold")
+        self.timer_label.grid(row=3, column=0)
+        self.n_time = tk.StringVar()
+        self.time_choosen = ttk.Combobox(width = 20, textvariable = self.n_time)
+        self.time_choosen['values'] = ('20 minutes', '45 minutes', '60 minutes')
+        self.time_choosen.current(0)
+        self.time_choosen.grid(row=4, column=0)
+
+        # Start button
+        self.start_btn = ttk.Button(text="Start")
+        self.start_btn.grid(row=5, column=0)
+
+        # Stop Button
+        self.stop_btn = ttk.Button(text = "Stop")
+        self.stop_btn.grid(row=6, column=0)
+
+
+    def toggle_webcam(self):
+        if(self.cam_on):
+            self.cam_on = False
+            self.vid.release()
+            self.canvas = tk.Canvas(bg = "black", height=480, width=640)
+            self.canvas.create_text(330, 240, text="Camera is Turned Off", fill="white")
+        else :
+            self.cam_on = True
+            self.vid = cv2.VideoCapture(0) 
+            self.canvas = ttk.Label()
+            self.show_frame()
+
+        self.canvas.grid(row = 1, column = 0)
+
+
+    def show_frame(self):
+        if(self.cam_on):
+
+            ret, _ = self.vid.read()
+            if(ret):
+
+                # Get the latest frame and convert into Image
+                cv2image= cv2.cvtColor(self.vid.read()[1],cv2.COLOR_BGR2RGB)
+                img = Image.fromarray(cv2image)
+
+                # Convert image to PhotoImage
+                imgtk = ImageTk.PhotoImage(image = img)
+                self.canvas.imgtk = imgtk
+                self.canvas.configure(image=imgtk)
+
+                # Repeat after an interval to capture continiously
+                self.canvas.after(20, self.show_frame)
+
+
+       
+
+
+
+
 
 
 

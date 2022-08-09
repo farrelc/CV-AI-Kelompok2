@@ -1,5 +1,9 @@
 import cv2
 
+class EyeDetection :
+    pass
+
+
 face_cascade = cv2.CascadeClassifier('CascadeClassifier/haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('CascadeClassifier/haarcascade_eye_tree_eyeglasses.xml')
 cap = cv2.VideoCapture(0)
