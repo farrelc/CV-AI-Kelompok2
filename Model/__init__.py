@@ -1,1 +1,1 @@
-from .EyeDetector import EyeDetection
+from .Detector import test

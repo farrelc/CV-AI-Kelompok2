@@ -2,17 +2,18 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 import cv2
+from Model import Detector
 
 class Window(tk.Tk):
     cam_on = False
     vid = None
+    start = False
 
     def __init__(self):
         super().__init__()
 
         # configure the root window
         self.title('Eye Refresh App')
-        self.geometry('1200x640')
         self.resizable(0,0)
 
         # Greetings words
@@ -38,11 +39,11 @@ class Window(tk.Tk):
         self.time_choosen.grid(row=4, column=0)
 
         # Start button
-        self.start_btn = ttk.Button(text="Start")
+        self.start_btn = ttk.Button(text="Start", command = self.start_btn_action)
         self.start_btn.grid(row=5, column=0)
 
         # Stop Button
-        self.stop_btn = ttk.Button(text = "Stop")
+        self.stop_btn = ttk.Button(text = "Stop", command = self.stop_btn_action)
         self.stop_btn.grid(row=6, column=0)
 
 
@@ -57,8 +58,15 @@ class Window(tk.Tk):
             self.vid = cv2.VideoCapture(0) 
             self.canvas = ttk.Label()
             self.show_frame()
+            self.start = False
 
         self.canvas.grid(row = 1, column = 0)
+    
+    def start_btn_action(self):
+        self.start = True
+    
+    def stop_btn_action(self):
+        self.start = False
 
 
     def show_frame(self):
@@ -68,8 +76,9 @@ class Window(tk.Tk):
             if(ret):
 
                 # Get the latest frame and convert into Image
-                cv2image= cv2.cvtColor(self.vid.read()[1],cv2.COLOR_BGR2RGB)
-                img = Image.fromarray(cv2image)
+                cv2image = cv2.cvtColor(self.vid.read()[1],cv2.COLOR_BGR2RGB)
+                rendered_image = Detector.test(cv2image) if self.start else cv2image
+                img = Image.fromarray(rendered_image)
 
                 # Convert image to PhotoImage
                 imgtk = ImageTk.PhotoImage(image = img)

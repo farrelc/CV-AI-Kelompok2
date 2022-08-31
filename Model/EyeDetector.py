@@ -1,11 +1,7 @@
 import cv2
 
-class EyeDetection :
-    pass
-
-
-face_cascade = cv2.CascadeClassifier('CascadeClassifier/haarcascade_frontalface_default.xml')
-eye_cascade = cv2.CascadeClassifier('CascadeClassifier/haarcascade_eye_tree_eyeglasses.xml')
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye_tree_eyeglasses.xml')
 cap = cv2.VideoCapture(0)
 
 while cap.isOpened():
@@ -22,7 +18,7 @@ while cap.isOpened():
         roi_color = img[y:y+h, x:x+w]
 
         # Detect Eyes
-        eyes = eye_cascade.detectMultiScale(roi_gray)
+        eyes = eye_cascade.detectMultiScale(roi_gray, 1.1, 11)
         for (ex, ey ,ew, eh) in eyes:
             # Set boundary box for eyes
             cv2.rectangle(roi_color, (ex,ey), (ex+ew, ey+eh), (0, 255, 0), 5)
