@@ -4,10 +4,12 @@ from PIL import Image, ImageTk
 import cv2
 from Model import Detector
 
+
 class Window(tk.Tk):
     cam_on = False
     vid = None
     start = False
+    counter = 0
 
     def __init__(self):
         super().__init__()
@@ -46,7 +48,17 @@ class Window(tk.Tk):
         self.stop_btn = ttk.Button(text = "Stop", command = self.stop_btn_action)
         self.stop_btn.grid(row=6, column=0)
 
+        # Reset Button
+        self.reset_btn = ttk.Button(text = "Reset", command = self.reset_btn_action)
+        self.reset_btn.grid(row = 7, column=0)
 
+        # Timer info
+        self.timer_minutes = tk.Label(text = "00 Minutes")
+        self.timer_minutes.grid(row=8, column=0)
+        self.timer_seconds = tk.Label(text = "00 Seconds")
+        self.timer_seconds.grid(row=9, column=0)
+
+    
     def toggle_webcam(self):
         if(self.cam_on):
             self.cam_on = False
@@ -63,11 +75,33 @@ class Window(tk.Tk):
         self.canvas.grid(row = 1, column = 0)
     
     def start_btn_action(self):
-        self.start = True
-    
+        if (self.cam_on) :
+            self.start = True
+            self.counter_label()
+
+
+    def counter_label(self):
+        def count():
+            if(self.start and self.cam_on):
+                secs = self.counter % 60
+                mins = self.counter // 60
+                new_label_seconds = str(secs) if secs > 9 else "0" + str(secs)
+                new_label_minutes = str(mins) if mins > 9 else "0" + str(mins)
+                self.timer_minutes['text'] = new_label_minutes + " Minutes"
+                self.timer_seconds['text'] = new_label_seconds + " Seconds"
+                self.timer_seconds.after(1000, count)
+                self.counter += 1
+
+        count()
+
+
     def stop_btn_action(self):
         self.start = False
-
+    
+    def reset_btn_action(self):
+        self.counter = 0
+        self.timer_minutes['text'] = "00 Minutes"
+        self.timer_seconds['text'] = "00 Seconds"
 
     def show_frame(self):
         if(self.cam_on):
@@ -77,7 +111,7 @@ class Window(tk.Tk):
 
                 # Get the latest frame and convert into Image
                 cv2image = cv2.cvtColor(self.vid.read()[1],cv2.COLOR_BGR2RGB)
-                rendered_image = Detector.test(cv2image) if self.start else cv2image
+                rendered_image = Detector.get_face_and_eye(cv2image) if self.start else cv2image
                 img = Image.fromarray(rendered_image)
 
                 # Convert image to PhotoImage
@@ -87,13 +121,3 @@ class Window(tk.Tk):
 
                 # Repeat after an interval to capture continiously
                 self.canvas.after(20, self.show_frame)
-
-
-       
-
-
-
-
-
-
-

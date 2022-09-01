@@ -1,1 +1,1 @@
-from .Detector import test
+from .Detector import get_face_and_eye
