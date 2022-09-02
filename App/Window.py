@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 from PIL import Image, ImageTk
 import cv2
 from Model import Detector
@@ -10,6 +11,9 @@ class Window(tk.Tk):
     vid = None
     start = False
     counter = 0
+    face_is_detected = False
+    eye_is_detected = False
+    time_threshold = 0
 
     def __init__(self):
         super().__init__()
@@ -53,10 +57,12 @@ class Window(tk.Tk):
         self.reset_btn.grid(row = 7, column=0)
 
         # Timer info
+        self.timer_label = ttk.Label(text= "Time of Eye interacted with Screen :")
+        self.timer_label.grid(row=8, column=0)
         self.timer_minutes = tk.Label(text = "00 Minutes")
-        self.timer_minutes.grid(row=8, column=0)
+        self.timer_minutes.grid(row=9, column=0)
         self.timer_seconds = tk.Label(text = "00 Seconds")
-        self.timer_seconds.grid(row=9, column=0)
+        self.timer_seconds.grid(row=10, column=0)
 
     
     def toggle_webcam(self):
@@ -77,7 +83,17 @@ class Window(tk.Tk):
     def start_btn_action(self):
         if (self.cam_on) :
             self.start = True
+            self.set_selected_time_threshold()
+            print(self.time_threshold)
             self.counter_label()
+    
+    def set_selected_time_threshold(self):
+        if(self.time_choosen.get() == "20 minutes"):
+            self.time_threshold = 1200
+        elif(self.time_choosen.get() == "45 minutes"):
+            self.time_threshold = 2700
+        else:
+            self.time_threshold = 3600
 
 
     def counter_label(self):
@@ -89,8 +105,20 @@ class Window(tk.Tk):
                 new_label_minutes = str(mins) if mins > 9 else "0" + str(mins)
                 self.timer_minutes['text'] = new_label_minutes + " Minutes"
                 self.timer_seconds['text'] = new_label_seconds + " Seconds"
-                self.timer_seconds.after(1000, count)
+
+                if(self.counter == self.time_threshold):
+                    messagebox.showinfo("Time is Up","Lets see around before you get back into the screen")
+                    return 
+
+                print("Face is Detected : ",self.face_is_detected)
+                print("Eye is Detected : ",self.eye_is_detected)
+
+                if(not(self.face_is_detected or self.eye_is_detected)):
+                    self.counter -= 1
+
                 self.counter += 1
+
+                self.timer_seconds.after(1000, count)
 
         count()
 
@@ -111,7 +139,12 @@ class Window(tk.Tk):
 
                 # Get the latest frame and convert into Image
                 cv2image = cv2.cvtColor(self.vid.read()[1],cv2.COLOR_BGR2RGB)
-                rendered_image = Detector.get_face_and_eye(cv2image) if self.start else cv2image
+
+                if (self.start):
+                    rendered_image, self.face_is_detected, self.eye_is_detected = Detector.get_face_and_eye(cv2image)
+                else:
+                    rendered_image = cv2image
+
                 img = Image.fromarray(rendered_image)
 
                 # Convert image to PhotoImage
