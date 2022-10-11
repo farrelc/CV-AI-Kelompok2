@@ -17,52 +17,53 @@ class Window(tk.Tk):
 
     def __init__(self):
         super().__init__()
+        
+        # Set Azure Theme
+        self.style = ttk.Style(self)
+        self.tk.call('source', 'App/azure.tcl')
+        self.style.theme_use('azure')
 
         # configure the root window
         self.title('Eye Refresh App')
         self.resizable(0,0)
 
-        # Greetings words
-        self.greetings = ttk.Label(text = "Hello welcome to the App")
-        self.greetings.grid(row = 0, column = 0)
-
         # Webcam
         self.canvas = tk.Canvas(bg = "black", height=480, width=640)
         self.canvas.create_text(330, 240, text="Camera is Turned Off", fill="white")
-        self.canvas.grid(row = 1, column = 0)
+        self.canvas.grid(row = 0, column = 0, padx=10, pady=10, rowspan = 9)
 
         # button
         self.button1 = ttk.Button(text="Toggle Webcam", command = self.toggle_webcam)
-        self.button1.grid(row = 2, column = 0)
+        self.button1.grid(row = 0, column = 1)
 
         # timer options
         self.timer_label = ttk.Label(text="Select Time Threshold")
-        self.timer_label.grid(row=3, column=0)
+        self.timer_label.grid(row = 1, column = 1)
         self.n_time = tk.StringVar()
         self.time_choosen = ttk.Combobox(width = 20, textvariable = self.n_time)
-        self.time_choosen['values'] = ('20 minutes', '45 minutes', '60 minutes')
+        self.time_choosen['values'] = ('10 Seconds', '15 Seconds', '20 Seconds')
         self.time_choosen.current(0)
-        self.time_choosen.grid(row=4, column=0)
+        self.time_choosen.grid(row = 2, column = 1, pady = 1)
 
         # Start button
         self.start_btn = ttk.Button(text="Start", command = self.start_btn_action)
-        self.start_btn.grid(row=5, column=0)
+        self.start_btn.grid(row=3, column=1,pady=1)
 
         # Stop Button
         self.stop_btn = ttk.Button(text = "Stop", command = self.stop_btn_action)
-        self.stop_btn.grid(row=6, column=0)
+        self.stop_btn.grid(row=4, column=1, pady=1)
 
         # Reset Button
         self.reset_btn = ttk.Button(text = "Reset", command = self.reset_btn_action)
-        self.reset_btn.grid(row = 7, column=0)
+        self.reset_btn.grid(row = 5, column=1)
 
         # Timer info
-        self.timer_label = ttk.Label(text= "Time of Eye interacted with Screen :")
-        self.timer_label.grid(row=8, column=0)
-        self.timer_minutes = tk.Label(text = "00 Minutes")
-        self.timer_minutes.grid(row=9, column=0)
-        self.timer_seconds = tk.Label(text = "00 Seconds")
-        self.timer_seconds.grid(row=10, column=0)
+        self.timer_label = ttk.Label(text= "Time of Eye interacted with The Screen :")
+        self.timer_label.grid(row=6, column=1, padx=(0,10))
+        self.timer_minutes = tk.Label(text = "00 Mins", font=("Helvetica", 20))
+        self.timer_minutes.grid(row=7, column=1)
+        self.timer_seconds = tk.Label(text = "00 Secs", font=("Helvetica", 20))
+        self.timer_seconds.grid(row=8, column=1)
 
     
     def toggle_webcam(self):
@@ -78,8 +79,9 @@ class Window(tk.Tk):
             self.show_frame()
             self.start = False
 
-        self.canvas.grid(row = 1, column = 0)
+        self.canvas.grid(row = 0, column = 0, padx=2, pady=2, rowspan=9)
     
+
     def start_btn_action(self):
         if (self.cam_on) :
             self.start = True
@@ -87,13 +89,14 @@ class Window(tk.Tk):
             print(self.time_threshold)
             self.counter_label()
     
+    
     def set_selected_time_threshold(self):
-        if(self.time_choosen.get() == "20 minutes"):
-            self.time_threshold = 1200
-        elif(self.time_choosen.get() == "45 minutes"):
-            self.time_threshold = 2700
+        if(self.time_choosen.get() == "10 Seconds"):
+            self.time_threshold = 10
+        elif(self.time_choosen.get() == "15 Seconds"):
+            self.time_threshold = 15
         else:
-            self.time_threshold = 3600
+            self.time_threshold = 20
 
 
     def counter_label(self):
@@ -103,8 +106,8 @@ class Window(tk.Tk):
                 mins = self.counter // 60
                 new_label_seconds = str(secs) if secs > 9 else "0" + str(secs)
                 new_label_minutes = str(mins) if mins > 9 else "0" + str(mins)
-                self.timer_minutes['text'] = new_label_minutes + " Minutes"
-                self.timer_seconds['text'] = new_label_seconds + " Seconds"
+                self.timer_minutes['text'] = new_label_minutes + " Mins"
+                self.timer_seconds['text'] = new_label_seconds + " Secs"
 
                 if(self.counter == self.time_threshold):
                     messagebox.showinfo("Time is Up","Lets see around before you get back into the screen")
@@ -128,8 +131,8 @@ class Window(tk.Tk):
     
     def reset_btn_action(self):
         self.counter = 0
-        self.timer_minutes['text'] = "00 Minutes"
-        self.timer_seconds['text'] = "00 Seconds"
+        self.timer_minutes['text'] = "00 Mins"
+        self.timer_seconds['text'] = "00 Secs"
 
     def show_frame(self):
         if(self.cam_on):
@@ -139,6 +142,7 @@ class Window(tk.Tk):
 
                 # Get the latest frame and convert into Image
                 cv2image = cv2.cvtColor(self.vid.read()[1],cv2.COLOR_BGR2RGB)
+                cv2image = cv2.resize(cv2image, (640,480))
 
                 if (self.start):
                     rendered_image, self.face_is_detected, self.eye_is_detected = Detector.get_face_and_eye(cv2image)
