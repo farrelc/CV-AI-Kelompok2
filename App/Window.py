@@ -12,7 +12,7 @@ class Window(tk.Tk):
     start = False
     counter = 0
     face_is_detected = False
-    eye_is_closed = False
+    eyes_is_closed = False
     time_threshold = 0
     time_to_reset = 0
 
@@ -25,12 +25,15 @@ class Window(tk.Tk):
         self.style.theme_use('azure')
 
         # configure the root window
-        self.title('Eye Refresh App')
+        self.title('Eye Refresh Alert')
         self.resizable(0,0)
+
+        # Add icon
+        self.iconphoto(False, tk.PhotoImage(file = 'App/icon/eye-line.PNG'))
 
         # Webcam
         self.canvas = tk.Canvas(bg = "black", height=480, width=640)
-        self.canvas.create_text(330, 240, text="Camera is Turned Off", fill="white",font=("Helvetica", 15))
+        self.canvas.create_text(330, 240, text="The camera is turned off.", fill="white",font=("Helvetica", 15))
         self.canvas.grid(row = 0, column = 0, padx=10, pady=10, rowspan = 9)
 
         # button
@@ -42,7 +45,7 @@ class Window(tk.Tk):
         self.timer_label.grid(row = 1, column = 1)
         self.n_time = tk.StringVar()
         self.time_choosen = ttk.Combobox(width = 20, textvariable = self.n_time)
-        self.time_choosen['values'] = ('10 Seconds', '15 Seconds', '20 Seconds')
+        self.time_choosen['values'] = ('20 Minutes', '40 Minutes', '60 Minutes')
         self.time_choosen.current(0)
         self.time_choosen.grid(row = 2, column = 1, pady = 1)
 
@@ -60,7 +63,7 @@ class Window(tk.Tk):
         self.reset_btn['state'] = 'disabled'
 
         # Timer info
-        self.timer_label = ttk.Label(text= "Time of Eye interacted with The Screen :")
+        self.timer_label = ttk.Label(text= "Total time of the eyes interacting with the screen :")
         self.timer_label.grid(row=6, column=1, padx=(0,10))
         self.timer_minutes = tk.Label(text = "00 Mins", font=("Helvetica", 20))
         self.timer_minutes.grid(row=7, column=1)
@@ -74,7 +77,7 @@ class Window(tk.Tk):
             self.cam_on = False
             self.vid.release()
             self.canvas = tk.Canvas(bg = "black", height=480, width=640)
-            self.canvas.create_text(330, 240, text="Camera is Turned Off", fill="white", font=("Helvetica", 15))
+            self.canvas.create_text(330, 240, text="The camera is turned off.", fill="white", font=("Helvetica", 15))
         else :
             self.cam_on = True
             self.vid = cv2.VideoCapture(0) 
@@ -94,14 +97,13 @@ class Window(tk.Tk):
             self.reset_btn['state'] = 'disabled'
             
     
-    
     def set_selected_time_threshold(self):
-        if(self.time_choosen.get() == "10 Seconds"):
-            self.time_threshold = 10
-        elif(self.time_choosen.get() == "15 Seconds"):
-            self.time_threshold = 15
+        if(self.time_choosen.get() == "20 Minutes"):
+            self.time_threshold = 20*60
+        elif(self.time_choosen.get() == "40 Minutes"):
+            self.time_threshold = 40*60
         else:
-            self.time_threshold = 20
+            self.time_threshold = 60*60
 
 
     def counter_label(self):
@@ -109,12 +111,12 @@ class Window(tk.Tk):
             if(self.start and self.cam_on):
 
                 # Check face and eyes
-                print(self.eye_is_closed)
-                if(self.face_is_detected == False or self.eye_is_closed == True):
-                    # if face is not deteced or eye is closed then do not update time counter but update time reset
+                print(self.eyes_is_closed)
+                if(self.face_is_detected == False or self.eyes_is_closed == True):
+                    # if face is not deteced or eyes is closed then do not update time counter but update time reset
                     self.time_to_reset += 1
                 else :
-                    # Update counter and time to reset if face or eye is detected again
+                    # Update counter if face or eyes is detected again
                     self.counter += 1
                     self.time_to_reset = 0
 
@@ -128,19 +130,19 @@ class Window(tk.Tk):
                 self.timer_minutes['text'] = new_label_minutes + " Mins"
                 self.timer_seconds['text'] = new_label_seconds + " Secs"
                 
-                # Reset time if face and eye not deteced for certain time              
-                if(self.time_to_reset == 5):
+                # Reset time if face and eyes not deteced for certain time (This experiment using 5 minutes)              
+                if(self.time_to_reset == 5*60):
                     self.start = False
                     self.time_to_reset = 0
                     self.reset_btn_action()
-                    messagebox.showinfo("Reset", "We Reset the Timer because you were not in front of the Screen")
+                    messagebox.showinfo("Reset", "We Reset the Timer because you were not in front of the Screen for 5 minutes")
                     return 
 
                 # Check Time limit
                 if(self.counter == self.time_threshold):
                     self.start = False
                     self.reset_btn_action()
-                    messagebox.showinfo("Time is Up", f"Its been {self.time_choosen.get()}, Lets see around before you get back into the screen")
+                    messagebox.showinfo("Time is Up", f"It's been {self.time_choosen.get()}. Let's see around before you get back into the screen.")
                     return 
     
                 # Call function recursively
@@ -154,6 +156,7 @@ class Window(tk.Tk):
             self.start = False
             self.reset_btn['state'] = 'normal'
     
+
     def reset_btn_action(self):
         self.counter = 0
         self.timer_minutes['text'] = "00 Mins"
@@ -171,10 +174,10 @@ class Window(tk.Tk):
                 cv2image = cv2.resize(cv2image, (640,480), interpolation=cv2.INTER_CUBIC)
 
                 if (self.start):
-                    rendered_image, self.face_is_detected, self.eye_is_closed = Detector.get_face_and_eye(cv2image)
+                    # Rander image from model/detector
+                    rendered_image, self.face_is_detected, self.eyes_is_closed = Detector.get_face_and_eye(cv2image)
                     img = Image.fromarray(rendered_image)
                     final_img = self.face_eye_stats(img)
-
                 else:
                     final_img = Image.fromarray(cv2image)
 
@@ -185,13 +188,13 @@ class Window(tk.Tk):
                 self.canvas.configure(image=imgtk)
                 
                 # Repeat after an interval to capture continiously
-                self.canvas.after(10, self.show_frame)
+                self.canvas.after(20, self.show_frame)
     
     
     def face_eye_stats(self, frame):
         draw = ImageDraw.Draw(frame)
         if(self.face_is_detected):
-            if(self.eye_is_closed == False):
+            if(self.eyes_is_closed == False):
                 text = "Face Detected and Eyes Opened"
             else:
                 text = "Face Detected but Eyes Closed"

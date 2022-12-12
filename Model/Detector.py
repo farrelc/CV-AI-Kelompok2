@@ -57,18 +57,18 @@ def get_face_and_eye(cv2image):
     # face mesh model
     map_face_mesh = mp.solutions.face_mesh
 
-    # constants
-    EYE_CLOSED = False
-    FACE_DETECTED = False
+    # Stats
+    eyes_closed = False
+    face_detected = False
 
     # Left eyes indices 
-    LEFT_EYE =[362, 382, 381, 380, 374, 373, 390, 249, 263, 466, 388, 387, 386, 385,384, 398]
+    LEFT_EYE = [362, 382, 381, 380, 374, 373, 390, 249, 263, 466, 388, 387, 386, 385,384, 398]
 
     # right eyes indices
-    RIGHT_EYE=[33, 7, 163, 144, 145, 153, 154, 155, 133, 173, 157, 158, 159, 160, 161 , 246]
+    RIGHT_EYE = [33, 7, 163, 144, 145, 153, 154, 155, 133, 173, 157, 158, 159, 160, 161 , 246]
 
     # Face
-    FACE_OVAL= [10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377, 152, 148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162, 21, 54, 103,67, 109]
+    FACE = [10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377, 152, 148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162, 21, 54, 103,67, 109]
 
     # Run face mesh Model
     with map_face_mesh.FaceMesh(min_detection_confidence = 0.7, min_tracking_confidence=0.1) as face_mesh:
@@ -82,7 +82,7 @@ def get_face_and_eye(cv2image):
         if results.multi_face_landmarks:
             
             # Update face detection stats
-            FACE_DETECTED = True
+            face_detected = True
 
             # Get face mesh Coordinates
             mesh_coords = landmarksDetection(frame, results)
@@ -90,12 +90,12 @@ def get_face_and_eye(cv2image):
             # Draw face and eyes in frame
             cv.polylines(frame, [np.array([mesh_coords[p] for p in LEFT_EYE], dtype=np.int32)], True, (0,255,0), 1, cv.LINE_AA)
             cv.polylines(frame, [np.array([mesh_coords[p] for p in RIGHT_EYE], dtype=np.int32)], True, (0,255,0), 1, cv.LINE_AA)
-            cv.polylines(frame, [np.array([mesh_coords[p] for p in FACE_OVAL], dtype=np.int32)], True, (0,255,0), 1, cv.LINE_AA)
+            cv.polylines(frame, [np.array([mesh_coords[p] for p in FACE], dtype=np.int32)], True, (0,255,0), 1, cv.LINE_AA)
                         
             # Closing Eye Ratio
             ratio = closingEyeRatio(mesh_coords, RIGHT_EYE, LEFT_EYE)
 
             # Eye closed stats update
-            EYE_CLOSED = True if ratio > 3.75 else False
+            eyes_closed = True if ratio > 3.75 else False
   
-    return frame, FACE_DETECTED, EYE_CLOSED
+    return frame, face_detected, eyes_closed
