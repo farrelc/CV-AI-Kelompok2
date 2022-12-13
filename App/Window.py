@@ -111,7 +111,7 @@ class Window(tk.Tk):
             if(self.start and self.cam_on):
 
                 # Check face and eyes
-                print(self.eyes_is_closed)
+                print("Eyes is Closed : ",self.eyes_is_closed)
                 if(self.face_is_detected == False or self.eyes_is_closed == True):
                     # if face is not deteced or eyes is closed then do not update time counter but update time reset
                     self.time_to_reset += 1
