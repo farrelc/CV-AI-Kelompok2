@@ -9,14 +9,14 @@
 <a href="https://google.github.io/mediapipe/getting_started/python.html "><img src="https://img.shields.io/badge/MediaPipe%20-9.0.0-yellow.svg"/></a>
 <a href="https://numpy.org/install/"><img src="https://img.shields.io/badge/Numpy%20-1.19.4-white.svg"/></a>
 
-## Overview
+# Overview
 
 Eye Refresh Alert adalah aplikasi berbasis GUI/desktop yang digunakan untuk melakukan monitoring terhadap mata selama beraktivitas di depan layar laptop/komputer. 
 Aplikasi ini akan mengigatkan pengguna untuk mengistirahatkan mata akibat dari interaksi mata yang menatap layar selama batas waktu yang ditentukan.
 
 Eye Refresh Alert merupakan salah satu produk atau hasil dari kegiatan Focus Group Artificial Intelligence Laboratory Telkom University. Aplikasi ini dibuat menggunakan bahasa scripting python dengan library Tkinter sebagai GUI. Proses monitoring atau deteksi mata dari aplikasi ini memanfaatkan model <a href = "https://google.github.io/mediapipe/solutions/face_mesh">Face Mesh</a> dari platform yang dibuat oleh google yaitu <a href = "https://google.github.io/mediapipe/">Mediapipe</a>. 
 
-## Download and Install
+# Download and Install
 Eye Refresh Alert dapat di download melalui tautan <a href = 'https://tiny.one/eye-refresh-alert'>berikut</a>
 
 Instalasi dari aplikasi ini cukup sederhana kerena aplikasi ini berupa installer yang siap digunakan. Berikut adalah langkah-langkah instalasi:
@@ -66,7 +66,7 @@ Instalasi dari aplikasi ini cukup sederhana kerena aplikasi ini berupa installer
   <br>
 </div>
 
-## User Guide
+# User Guide
 
 <div>
   <p>Aplikasi Eye Refresh Alert dibuat dengan UI sesederhana mungkin sehingga dapat memudahkan pengguna dalam menggunakan aplikasi ini. Tampilan awal dari aplikasi ini adalah sebagai berikut.</p>
@@ -122,6 +122,6 @@ Instalasi dari aplikasi ini cukup sederhana kerena aplikasi ini berupa installer
   <br>
 </div>
 
-## Contribution Guidelines
+# Contribution Guidelines
 
 
