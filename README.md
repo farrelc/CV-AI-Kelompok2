@@ -114,7 +114,7 @@ Instalasi dari aplikasi ini cukup sederhana kerena aplikasi ini berupa installer
 </div>
 
 <div>
-  <p>Aplikasi ini juga akan melakukan pemberhentian monitoring secara otomatis jika wajah tidak terdeteksi di layar atau mata tertutup selama kurun waktu tertentu. Untuk saat ini batas waktu yang digunakan adalah 5 menit. Artinya jika selama 5 menit wajah tidak terdeteksi di layar atau mata tertutup maka, aplikasi ini akan melakukan pemberhentian monitoring dan memberika notifikasi sebagai berikut.</p>  
+  <p>Aplikasi ini juga akan melakukan pemberhentian monitoring secara otomatis jika wajah tidak terdeteksi di layar atau mata tertutup selama kurun waktu tertentu. Untuk saat ini batas waktu yang digunakan adalah 5 menit. Artinya jika selama 5 menit wajah tidak terdeteksi di layar atau mata tertutup maka aplikasi ini akan melakukan pemberhentian monitoring dan memberika notifikasi sebagai berikut.</p>  
   <br>
   <div align="center">
     <img src="https://user-images.githubusercontent.com/76652264/207918692-fe4f8f49-da88-42c0-aeaf-5bc0cdd9ec2c.png" width = "600"> 
