@@ -125,10 +125,35 @@ Instalasi dari aplikasi ini cukup sederhana kerena aplikasi ini berupa installer
 # Contribution Guidelines
 Jika anda ingin melakukan improvisasi dan perbaikan terhadap aplikasi Eye Refresh Alert, sangat dipersilahkan untuk melakukan clone untuk project ini dan melakukan pull request. Depedencies yang digunakan untuk project/aplikasi ini adalah sebagai berikut:
 
-Depedencies                   | Version                                                                                                                                                                           
------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
-**Python**                 | 3.8.7  
-**OpenCV**                 | 4.6.0
-**Tkinter**                | 0.1.0
-**MediaPipe**              | 9.0.0
-**NumPy**                  | 1.19.4
+<div align = "center">
+<table>
+<thead>
+  <tr>
+    <th>Depedencies</th>
+    <th>Version</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>Python</td>
+    <td>3.8.7</td>
+  </tr>
+  <tr>
+    <td>OpenCV</td>
+    <td>4.6.0</td>
+  </tr>
+  <tr>
+    <td>TkInter</td>
+    <td>0.1.0</td>
+  </tr>
+  <tr>
+    <td>MediaPipe</td>
+    <td>9.0.0</td>
+  </tr>
+  <tr>
+    <td>NumPy</td>
+    <td>1.19.4</td>
+  </tr>
+</tbody>
+</table>
+</div>
