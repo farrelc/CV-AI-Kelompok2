@@ -157,3 +157,13 @@ Jika anda ingin melakukan improvisasi dan perbaikan terhadap aplikasi Eye Refres
 </tbody>
 </table>
 </div>
+
+# References
+
+<li><a href = "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6020759/">Digital eye strain: prevalence, measurement and amelioration</a></li>
+<li><a href = "https://arxiv.org/abs/2006.11341">Real-time Pupil Tracking from Monocular Video for Digital Puppetry</a></li>
+<li><a href = "https://www.irjet.net/archives/V8/i5/IRJET-V8I5427.pdf">Eye Detection using Haar Cascade Classifier</a></li>
+
+
+
+
