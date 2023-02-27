@@ -12,7 +12,7 @@
 # Overview
 
 Eye Refresh Alert adalah aplikasi berbasis GUI/desktop yang digunakan untuk melakukan monitoring terhadap mata selama beraktivitas di depan layar laptop/komputer. 
-Aplikasi ini akan mengigatkan pengguna untuk mengistirahatkan mata akibat dari interaksi mata yang menatap layar selama batas waktu yang ditentukan.
+Aplikasi ini akan mengingatkan pengguna untuk mengistirahatkan mata akibat dari interaksi mata yang menatap layar selama batas waktu yang ditentukan.
 
 Eye Refresh Alert merupakan salah satu produk atau hasil dari kegiatan Focus Group Artificial Intelligence Laboratory Telkom University. Aplikasi ini dibuat menggunakan bahasa scripting python dengan library Tkinter sebagai GUI. Proses monitoring atau deteksi mata dari aplikasi ini memanfaatkan model <a href = "https://google.github.io/mediapipe/solutions/face_mesh">Face Mesh</a> dari platform yang dibuat oleh google yaitu <a href = "https://google.github.io/mediapipe/">Mediapipe</a>. 
 
